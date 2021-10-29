@@ -28,6 +28,7 @@ function Favoritos(){
     return(
         <div id="meus-filmes">
             <h1>Meu Filmes</h1>
+            {filmes.length === 0 && <span>Você não possi nenhum filme salvo :( </span>}
             <ul>
                 {filmes.map((item) => {
                     return(
