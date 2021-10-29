@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 
 import './filme-info.css'
 
-import { useParams } from "react-router";
+import { useParams , useHistory } from "react-router";
 
 import api from '../../services/api'
 
@@ -10,18 +10,31 @@ import api from '../../services/api'
 function Filme(){
 
     const {id} = useParams();
+    const history = useHistory ()
+
     const [filme, setFilme] = useState([])
     const [loading , setLoading] = useState(true)
 
     useEffect(() => {
         async function loadFilme(){
     const response = await api.get(`r-api/?api=filmes/${id}`)
+
+    if (response.data.lenght === 0){
+        history.replace('/');
+        return;
+    }
+
     setFilme(response.data)
     setLoading(false)
 
         }
         loadFilme()
-    },[id])
+
+        return () => {
+
+        }
+
+    },[history,id])
 
 
     if (loading){
@@ -34,7 +47,23 @@ function Filme(){
 
     return(
         <div className="filme-info">
-            <h1>Página Detalhes - {id}</h1>
+            <h1>{filme.nome}</h1>
+            <img src={filme.foto} alt ={filme.nome}/>
+
+            <h3>Sinopse</h3>
+
+            {filme.sinopse}
+
+            <div className="botoes">
+                <button onClick={() => {}} >Salvar</button>
+                <button>
+<a target="_blank" href={`https://youtube.com/results?search_query=${filme.nome} Trailer`}>
+                        Trailer
+                    </a>
+                </button>
+            </div>
+
+
         </div>
     )
 }
